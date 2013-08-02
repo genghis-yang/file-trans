@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="FileTrans" default="local_build">
+	<property name="class.dir" value="${basedir}/bin" />
+	<property name="source.dir" value="${basedir}/src" />
+
+	<!-- ================================= 
+          target: local_build              
+         ================================= -->
+	<target name="local_build" depends="init,compile,test,jar" description="Validate and publish runnable jar." />
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: init                      
+         - - - - - - - - - - - - - - - - - -->
+	<target name="init">
+		<delete dir="${class.dir}" />
+		<mkdir dir="${class.dir}" />
+		<delete>
+			<fileset dir="${source.dir}">
+				<include name="**/*.class" />
+			</fileset>
+		</delete>
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: compile                      
+         - - - - - - - - - - - - - - - - - -->
+	<target name="compile">
+		<javac srcdir="${source.dir}" destdir="${class.dir}" classpath="." debug="on" />
+		<copy todir="${class.dir}">
+			<fileset dir="${source.dir}">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: test                      
+         - - - - - - - - - - - - - - - - - -->
+	<target name="test">
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: jar                      
+         - - - - - - - - - - - - - - - - - -->
+	<target name="jar">
+		<jar destfile="${basedir}/filetrans.jar" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Main-Class" value="tk.genghis.filetrans.FileTrans" />
+				<attribute name="Class-Path" value="." />
+			</manifest>
+			<fileset dir="${class.dir}" />
+		</jar>
+	</target>
+</project>
